@@ -1,0 +1,59 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const heart = document.querySelector('.heart');
+    const body = document.body;
+    const numLines = 50;
+    const lines = [];
+
+    // Create lines and add to the body
+    for (let i = 0; i < numLines; i++) {
+        const line = document.createElement('div');
+        line.style.position = 'absolute';
+        line.style.width = '2px';
+        line.style.height = '100vh';
+        line.style.background = `hsl(${Math.random() * 360}, 100%, 75%)`;
+        line.style.opacity = 0;
+        line.style.transformOrigin = 'bottom';
+        body.appendChild(line);
+        lines.push(line);
+    }
+
+    // Function to update the position of the lines
+    function updateLines() {
+        const rect = heart.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        lines.forEach((line, index) => {
+            // Calculate a random position on the heart's perimeter
+            const angle = Math.random() * 2 * Math.PI;
+            const radiusX = rect.width / 2 * 1.5;
+            const radiusY = rect.height / 2 * 1.5;
+            const x = centerX + radiusX * Math.cos(angle);
+            const y = centerY + radiusY * Math.sin(angle);
+
+            // Calculate the angle to point the line towards the center of the heart
+            const dx = centerX - x;
+            const dy = centerY - y;
+            const angleDeg = Math.atan2(dy, dx) * 180 / Math.PI + 90;
+
+            // Apply styles with a slight delay
+            setTimeout(() => {
+                line.style.left = `${x}px`;
+                line.style.top = `${y}px`;
+                line.style.transform = `rotate(${angleDeg}deg) scaleY(${Math.random() * 0.5 + 0.5})`;
+                line.style.transition = 'all 2s ease-out';
+                line.style.opacity = 1;
+
+                // Make the lines disappear after a certain time
+                setTimeout(() => {
+                    line.style.opacity = 0;
+                    line.style.transform = `rotate(${angleDeg}deg) scaleY(0)`;
+                }, 1500 + index * 10);
+            }, index * 20);
+        });
+    }
+
+    // Repeat the animation
+    setInterval(updateLines, 2500); // Repeat every 2.5 seconds
+    updateLines(); // Initial run
+});
