@@ -10,5 +10,6 @@
     <div class="heart">
         Te Quiero mi Negrita
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
